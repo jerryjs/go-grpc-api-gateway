@@ -21,7 +21,7 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
-	routes.FineOne(ctx, svc.Client)
+	routes.FindOne(ctx, svc.Client)
 }
 
 func (svc *ServiceClient) CreateProduct(ctx *gin.Context) {

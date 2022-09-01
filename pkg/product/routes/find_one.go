@@ -9,7 +9,7 @@ import (
 	"github.com/jerryjs/go-grpc-api-gateway/pkg/product/pb"
 )
 
-func FineOne(ctx *gin.Context, c pb.ProductServiceClient) {
+func FindOne(ctx *gin.Context, c pb.ProductServiceClient) {
 	id, err := strconv.ParseInt(ctx.Param("id"), 10, 32)
 
 	if err != nil {
