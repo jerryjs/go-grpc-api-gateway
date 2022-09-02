@@ -2,7 +2,7 @@ module github.com/jerryjs/go-grpc-api-gateway
 
 go 1.18
 
-replace github.com/jerryjs/go-grpc-api-gateway => ./
+// replace github.com/jerryjs/go-grpc-api-gateway => ./
 
 require (
 	github.com/gin-gonic/gin v1.7.7
