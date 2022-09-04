@@ -25,6 +25,7 @@ type ProductServiceClient interface {
 	CreateProduct(ctx context.Context, in *CreateProductRequest, opts ...grpc.CallOption) (*CreateProductResponse, error)
 	FindOne(ctx context.Context, in *FindOneRequest, opts ...grpc.CallOption) (*FindOneResponse, error)
 	DecreaseStock(ctx context.Context, in *DecreaseStockRequest, opts ...grpc.CallOption) (*DecreaseStockResponse, error)
+	AddStock(ctx context.Context, in *AddStockRequest, opts ...grpc.CallOption) (*AddStockResponse, error)
 }
 
 type productServiceClient struct {
@@ -62,6 +63,15 @@ func (c *productServiceClient) DecreaseStock(ctx context.Context, in *DecreaseSt
 	return out, nil
 }
 
+func (c *productServiceClient) AddStock(ctx context.Context, in *AddStockRequest, opts ...grpc.CallOption) (*AddStockResponse, error) {
+	out := new(AddStockResponse)
+	err := c.cc.Invoke(ctx, "/product.ProductService/AddStock", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ProductServiceServer is the server API for ProductService service.
 // All implementations should embed UnimplementedProductServiceServer
 // for forward compatibility
@@ -69,6 +79,7 @@ type ProductServiceServer interface {
 	CreateProduct(context.Context, *CreateProductRequest) (*CreateProductResponse, error)
 	FindOne(context.Context, *FindOneRequest) (*FindOneResponse, error)
 	DecreaseStock(context.Context, *DecreaseStockRequest) (*DecreaseStockResponse, error)
+	AddStock(context.Context, *AddStockRequest) (*AddStockResponse, error)
 }
 
 // UnimplementedProductServiceServer should be embedded to have forward compatible implementations.
@@ -83,6 +94,9 @@ func (UnimplementedProductServiceServer) FindOne(context.Context, *FindOneReques
 }
 func (UnimplementedProductServiceServer) DecreaseStock(context.Context, *DecreaseStockRequest) (*DecreaseStockResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DecreaseStock not implemented")
+}
+func (UnimplementedProductServiceServer) AddStock(context.Context, *AddStockRequest) (*AddStockResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddStock not implemented")
 }
 
 // UnsafeProductServiceServer may be embedded to opt out of forward compatibility for this service.
@@ -150,6 +164,24 @@ func _ProductService_DecreaseStock_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ProductService_AddStock_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AddStockRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProductServiceServer).AddStock(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/product.ProductService/AddStock",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProductServiceServer).AddStock(ctx, req.(*AddStockRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ProductService_ServiceDesc is the grpc.ServiceDesc for ProductService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -168,6 +200,10 @@ var ProductService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DecreaseStock",
 			Handler:    _ProductService_DecreaseStock_Handler,
+		},
+		{
+			MethodName: "AddStock",
+			Handler:    _ProductService_AddStock_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

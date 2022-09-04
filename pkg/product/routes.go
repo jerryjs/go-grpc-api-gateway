@@ -18,6 +18,11 @@ func RegisterRoutes(r *gin.Engine, c *config.Config, authSvc *auth.ServiceClient
 	routes.Use(a.AuthRequired)
 	routes.POST("/", svc.CreateProduct)
 	routes.GET("/:id", svc.FindOne)
+	routes.POST("/:id/stock/:stock", svc.AddStock)
+}
+
+func (svc *ServiceClient) AddStock(ctx *gin.Context) {
+	routes.AddStock(ctx, svc.Client)
 }
 
 func (svc *ServiceClient) FindOne(ctx *gin.Context) {
